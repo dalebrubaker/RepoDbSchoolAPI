@@ -32,21 +32,53 @@ namespace RepoDbSchoolAPI
             connection.Open();
             connection.ExecuteNonQuery(
                 @"
-                        CREATE TABLE [dbo].[Student]
+                        CREATE TABLE [Teacher]
+                        (
+                            [Id] INT IDENTITY(1,1)
+                            , [Name] NVARCHAR(128) NOT NULL
+                            , CONSTRAINT [PK_Teacher] PRIMARY KEY ([Id] ASC )
+                        )
+                        ");
+            connection.ExecuteNonQuery(
+                @"
+                        CREATE TABLE [Student]
                         (
                             [Id] INT IDENTITY(1,1)
                             , [TeacherId] INT 
                             , [Name] NVARCHAR(128) NOT NULL
-                            , CONSTRAINT [PK_Student] PRIMARY KEY CLUSTERED ([Id] ASC )
-                        )
-                        CREATE TABLE [dbo].[Teacher]
-                        (
-                            [Id] INT IDENTITY(1,1)
-                            , [Name] NVARCHAR(128) NOT NULL
-                            , CONSTRAINT [PK_Teacher] PRIMARY KEY CLUSTERED ([Id] ASC )
+                            , CONSTRAINT [PK_Student] PRIMARY KEY ([Id] ASC )
                         )
                         ");
             var existsAfter = File.Exists(DbFileName);
+            connection.ExecuteNonQuery(
+                @"
+                        INSERT INTO [Teacher]
+                        (
+                            [Name]
+                        )
+                        VALUES
+                        ('Lurlene Laury')
+                        , ('Wynell Kort')
+                        , ('Alexa Dempsey')
+                        , ('Loan Goggins')
+                        , ('Lien Lange')
+                        , ('Veronika Hershey')
+                        , ('Erasmo Milo')
+                        , ('Columbus Hadden')
+                        , ('Lena Cendejas')
+                        , ('Shawana Bono')
+                        , ('Morton Jourdan')
+                        , ('Myesha Griffin')
+                        , ('Cassi Pelayo')
+                        , ('Shelly Chouinard')
+                        , ('Gabrielle Cloninger')
+                        , ('Brandee Rominger')
+                        , ('Kimberly Blackmore')
+                        , ('Efren Wey')
+                        , ('Fabiola Douse')
+                        , ('Heath Sessums');                        
+            ");
+
         }
     }
 }
