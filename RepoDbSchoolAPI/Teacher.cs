@@ -1,4 +1,4 @@
-﻿namespace SchoolAPI.Models
+﻿namespace RepoDbSchoolAPI
 {
     public class Teacher
     {

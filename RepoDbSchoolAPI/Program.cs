@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,14 @@ namespace RepoDbSchoolAPI
             _connectionString = $"Data Source = {DbFileName}";
             CreateTestDatabase();
             SqLiteBootstrap.Initialize();
+            ITeacherRepository teacherRepository = new TeacherRepository(_connectionString);
+            IStudentRepository studentRepository = new StudentRepository(_connectionString);
+            var controller = new StudentController(studentRepository, teacherRepository);
+            var dyn = controller.Generate();
+            var inserted = dyn.Inserted;
+            var msec = dyn.ElapsedInMilliseconds;
+            Console.WriteLine($"Generated {inserted:N0} students in {msec:N1} msec");
+            Console.ReadKey();
         }
 
         private static void CreateTestDatabase()
@@ -36,7 +45,7 @@ namespace RepoDbSchoolAPI
                         (
                             [Id] INT IDENTITY(1,1)
                             , [Name] NVARCHAR(128) NOT NULL
-                            , CONSTRAINT [PK_Teacher] PRIMARY KEY ([Id] ASC )
+                            , CONSTRAINT [PK_Teacher] PRIMARY KEY ([Id] ASC)
                         )
                         ");
             connection.ExecuteNonQuery(

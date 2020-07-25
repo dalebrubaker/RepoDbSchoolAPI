@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Linq;
 using RepoDb;
-using SchoolAPI.Models;
 
 namespace RepoDbSchoolAPI
 {
-    public class TeacherRepository : BaseRepository<Teacher, SqlConnection>, ITeacherRepository
+    public class TeacherRepository : BaseRepository<Teacher, SQLiteConnection>, ITeacherRepository
     {
         public TeacherRepository(string connectionString) : base(connectionString)
-            //: base(@"Server=.;Database=SchoolDB;Integrated Security=SSPI;")
-        { }
-
+        //: base(@"Server=.;Database=SchoolDB;Integrated Security=SSPI;")
+        {
+        }
 
         public IEnumerable<Teacher> GetAllTeachers()
         {

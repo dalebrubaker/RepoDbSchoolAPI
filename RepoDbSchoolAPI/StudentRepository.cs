@@ -23,7 +23,8 @@ namespace RepoDbSchoolAPI
 
         public int SaveAll(IList<Student> students)
         {
-            return 0;
+            InsertAll(students);
+            return (int)CountAll();
             //return this.BulkInsert(students);
         }
     }
