@@ -21,57 +21,53 @@ namespace RepoDbSchoolAPI
             m_teacherRepository = teacherRepository;
         }
 
-        //[HttpGet()]
-        //public ActionResult<IEnumerable<Student>> Get()
-        //{
-        //    return m_studentRepository.GetAllStudents().AsList();
-        //}
+        public IEnumerable<Student> Get()
+        {
+            return m_studentRepository.GetAllStudents().AsList();
+        }
 
-        //[HttpGet("querystat")]
-        //public ActionResult<dynamic> GetQueryStat()
-        //{
-        //    var students = m_studentRepository.GetAllStudents();
-        //    var iteration = 0;
-        //    var dateTime = DateTime.UtcNow;
-        //    foreach (var student in students)
-        //    {
-        //        var teacher = m_teacherRepository.GetTeacher(student.TeacherId);
-        //        if (teacher != null)
-        //        {
-        //            iteration++;
-        //        }
-        //    }
-        //    var elapsed = (DateTime.UtcNow - dateTime).TotalMilliseconds;
-        //    return new
-        //    {
-        //        Iteration = iteration,
-        //        ElapsedInMilliseconds = elapsed
-        //    };
-        //}
+        public dynamic GetQueryStat()
+        {
+            var students = m_studentRepository.GetAllStudents();
+            var iteration = 0;
+            var dateTime = DateTime.UtcNow;
+            foreach (var student in students)
+            {
+                var teacher = m_teacherRepository.GetTeacher(student.TeacherId);
+                if (teacher != null)
+                {
+                    iteration++;
+                }
+            }
+            var elapsed = (DateTime.UtcNow - dateTime).TotalMilliseconds;
+            return new
+            {
+                Iteration = iteration,
+                ElapsedInMilliseconds = elapsed
+            };
+        }
 
-        //[HttpGet("querystatcache")]
-        //public ActionResult<dynamic> GetQueryStatCache()
-        //{
-        //    var students = m_studentRepository.GetAllStudents();
-        //    var iteration = 0;
-        //    var dateTime = DateTime.UtcNow;
-        //    foreach (var student in students)
-        //    {
-        //        var teacher = m_teacherRepository.GetTeacherCache(student.TeacherId);
-        //        if (teacher != null)
-        //        {
-        //            iteration++;
-        //        }
-        //    }
-        //    var elapsed = (DateTime.UtcNow - dateTime).TotalMilliseconds;
-        //    return new
-        //    {
-        //        Iteration = iteration,
-        //        ElapsedInMilliseconds = elapsed
-        //    };
-        //}
+        public dynamic GetQueryStatCache()
+        {
+            var students = m_studentRepository.GetAllStudents();
+            var iteration = 0;
+            var dateTime = DateTime.UtcNow;
+            foreach (var student in students)
+            {
+                var teacher = m_teacherRepository.GetTeacherCache(student.TeacherId);
+                if (teacher != null)
+                {
+                    iteration++;
+                }
+            }
+            var elapsed = (DateTime.UtcNow - dateTime).TotalMilliseconds;
+            return new
+            {
+                Iteration = iteration,
+                ElapsedInMilliseconds = elapsed
+            };
+        }
 
-        //[HttpGet("generate/{count}")]
         public dynamic Generate(int count = 10000)
         {
             var teachers = m_teacherRepository

@@ -18,34 +18,35 @@ namespace RepoDbSchoolAPI
         static void Main(string[] args)
         {
             _connectionString = $"Data Source = {DbFileName}";
-            CreateTestDatabase();
             SqLiteBootstrap.Initialize();
             ITeacherRepository teacherRepository = new TeacherRepository(_connectionString);
             IStudentRepository studentRepository = new StudentRepository(_connectionString);
             var controller = new StudentController(studentRepository, teacherRepository);
-            var dyn = controller.Generate();
-            var inserted = dyn.Inserted;
-            var msec = dyn.ElapsedInMilliseconds;
-            Console.WriteLine($"Generated {inserted:N0} students in {msec:N1} msec");
+            var exists = File.Exists(DbFileName);
+            if (!exists)
+            {
+                CreateTestDatabase();
+                var generate = controller.Generate();
+                Console.WriteLine($"Generated {generate.Inserted:N0} students in {generate.ElapsedInMilliseconds:N1} msec");
+            }
+            var queryStat = controller.GetQueryStat();
+            Console.WriteLine($"QueryStat: {queryStat.Iteration:N0} students in {queryStat.ElapsedInMilliseconds:N1} msec");
+            var queryStatCache = controller.GetQueryStatCache();
+            Console.WriteLine($"QueryStat: {queryStatCache.Iteration:N0} students in {queryStatCache.ElapsedInMilliseconds:N1} msec");
             Console.ReadKey();
         }
 
         private static void CreateTestDatabase()
         {
-            var exists = File.Exists(DbFileName);
-            if (exists)
-            {
-                return;
-            }
             using var connection = new SQLiteConnection(_connectionString);
             connection.Open();
             connection.ExecuteNonQuery(
                 @"
                         CREATE TABLE [Teacher]
                         (
-                            [Id] INT IDENTITY(1,1)
+                            [Id] INTEGER
                             , [Name] NVARCHAR(128) NOT NULL
-                            , CONSTRAINT [PK_Teacher] PRIMARY KEY ([Id] ASC)
+                            , CONSTRAINT [PK_Teacher] PRIMARY KEY ([Id] ASC AUTOINCREMENT)
                         )
                         ");
             connection.ExecuteNonQuery(
