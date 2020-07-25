@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Dynamic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RepoDb;
 
 namespace RepoDbSchoolAPI
 {
-    class Program
+    internal class Program
     {
         private const string DbFileName = @".\Test.sqlite";
         private static string _connectionString;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             _connectionString = $"Data Source = {DbFileName}";
             SqLiteBootstrap.Initialize();
@@ -33,6 +31,12 @@ namespace RepoDbSchoolAPI
             Console.WriteLine($"QueryStat: {queryStat.Iteration:N0} students in {queryStat.ElapsedInMilliseconds:N1} msec");
             var queryStatCache = controller.GetQueryStatCache();
             Console.WriteLine($"QueryStat: {queryStatCache.Iteration:N0} students in {queryStatCache.ElapsedInMilliseconds:N1} msec");
+
+            var subset = teacherRepository.GetTeachersWithStudents(new List<int> {2, 3, 4}).ToList();
+            Debug.Assert(subset.Count == 3);
+            var students0 = subset[0].Students.ToList();
+            Debug.Assert(students0.Count > 0);
+            Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
 
@@ -88,7 +92,6 @@ namespace RepoDbSchoolAPI
                         , ('Fabiola Douse')
                         , ('Heath Sessums');                        
             ");
-
         }
     }
 }

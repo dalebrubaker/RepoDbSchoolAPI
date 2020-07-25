@@ -2,38 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using RepoDb.Extensions;
-// ReSharper disable InconsistentNaming
-// ReSharper disable FieldCanBeMadeReadOnly.Local
 
 namespace RepoDbSchoolAPI
 {
-    //[ApiController]
-    //[Route("[controller]")]
-    public class StudentController// : Controller
+    public class StudentController
     {
-        private IStudentRepository m_studentRepository;
-        private ITeacherRepository m_teacherRepository;
+        private readonly IStudentRepository _mStudentRepository;
+        private readonly ITeacherRepository _mTeacherRepository;
 
         public StudentController(IStudentRepository studentRepository,
             ITeacherRepository teacherRepository)
         {
-            m_studentRepository = studentRepository;
-            m_teacherRepository = teacherRepository;
+            _mStudentRepository = studentRepository;
+            _mTeacherRepository = teacherRepository;
         }
 
         public IEnumerable<Student> Get()
         {
-            return m_studentRepository.GetAllStudents().AsList();
+            return _mStudentRepository.GetAllStudents().AsList();
         }
 
         public dynamic GetQueryStat()
         {
-            var students = m_studentRepository.GetAllStudents();
+            var students = _mStudentRepository.GetAllStudents();
             var iteration = 0;
             var dateTime = DateTime.UtcNow;
             foreach (var student in students)
             {
-                var teacher = m_teacherRepository.GetTeacher(student.TeacherId);
+                var teacher = _mTeacherRepository.GetTeacher(student.TeacherId);
                 if (teacher != null)
                 {
                     iteration++;
@@ -49,12 +45,12 @@ namespace RepoDbSchoolAPI
 
         public dynamic GetQueryStatCache()
         {
-            var students = m_studentRepository.GetAllStudents();
+            var students = _mStudentRepository.GetAllStudents();
             var iteration = 0;
             var dateTime = DateTime.UtcNow;
             foreach (var student in students)
             {
-                var teacher = m_teacherRepository.GetTeacherCache(student.TeacherId);
+                var teacher = _mTeacherRepository.GetTeacherCache(student.TeacherId);
                 if (teacher != null)
                 {
                     iteration++;
@@ -70,7 +66,7 @@ namespace RepoDbSchoolAPI
 
         public dynamic Generate(int count = 10000)
         {
-            var teachers = m_teacherRepository
+            var teachers = _mTeacherRepository
                 .GetAllTeachers()
                 .AsList();
             var random = new Random();
@@ -89,7 +85,7 @@ namespace RepoDbSchoolAPI
                 students.Add(student);
             }
 
-            var insertedResult = m_studentRepository.SaveAll(students);
+            var insertedResult = _mStudentRepository.SaveAll(students);
             var elapsed = (DateTime.UtcNow - dateTime).TotalMilliseconds;
 
             return new

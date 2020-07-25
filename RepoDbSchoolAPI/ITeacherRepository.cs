@@ -7,5 +7,6 @@ namespace RepoDbSchoolAPI
         IEnumerable<Teacher> GetAllTeachers();
         Teacher GetTeacher(int teacherId);
         Teacher GetTeacherCache(int teacherId);
+        IEnumerable<Teacher> GetTeachersWithStudents(IEnumerable<int> ids);
     }
 }
