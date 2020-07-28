@@ -42,8 +42,7 @@ namespace RepoDbSchoolAPI
 
         private static void CreateTestDatabase()
         {
-            using var connection = new SQLiteConnection(_connectionString);
-            connection.Open();
+            using var connection = new SQLiteConnection(_connectionString).EnsureOpen();
             connection.ExecuteNonQuery(
                 @"
                         CREATE TABLE [Teacher]
